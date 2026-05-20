@@ -16,9 +16,15 @@
 			<th>更新</th>
 			<th>削除</th>
 		</tr>
-<!--		<tr th:each="medic:${medicines}">-->
-<!--			<td></td>-->
-<!--		</tr>-->
+		<tr th:each="medic:${medicines}">
+			<td th:text="${medic.id}"></td>
+			<td th:text="${medic.name}"></td>
+			<td th:text="${medic.count}"></td>
+			<td th:text="${medic.check}"></td>
+			<td th:text="${medic.note}"></td>
+			<td><button>更新</button></td>
+			<td><button>削除</button></td>
+		</tr>
 	</table>
 </body>
 </html>

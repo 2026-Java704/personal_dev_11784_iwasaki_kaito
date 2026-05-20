@@ -1,16 +1,20 @@
 package com.example.demo.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "medicines")
+@Table(name = "medicine")
 public class Medicine {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+
 	private Integer id;
 
 	private String name;
@@ -19,7 +23,16 @@ public class Medicine {
 
 	private Integer count;
 
+	@Column(name = "m_check")
 	private Boolean check;
+
+	@ManyToOne
+	@JoinColumn(name = "users_id")
+	private User user;
+
+	public User getUser() {
+		return user;
+	}
 
 	public Integer getId() {
 		return id;
