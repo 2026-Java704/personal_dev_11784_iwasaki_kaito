@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import com.example.demo.entity.Medicine;
 import com.example.demo.entity.User;
+import com.example.demo.model.Account;
 import com.example.demo.repository.MedicineRepository;
 import com.example.demo.repository.userRepository;
 
@@ -18,12 +18,15 @@ import com.example.demo.repository.userRepository;
 public class userController {
 	private final userRepository userRepository;
 	private final MedicineRepository medicineRepository;
+	private final Account account;
 
 	public userController(
 			userRepository userRepository,
-			MedicineRepository medicineRepository) {
+			MedicineRepository medicineRepository,
+			Account account) {
 		this.userRepository = userRepository;
 		this.medicineRepository = medicineRepository;
+		this.account = account;
 	}
 
 	@GetMapping("/login")
@@ -50,10 +53,11 @@ public class userController {
 
 		}
 		User user = usersList.get(0);
-		List<Medicine> medicines = medicineRepository.findByUserId(user.getId());
 
-		model.addAttribute("medicines", medicines);
-		return "main";
+		account.setId(user.getId());
+		account.setName(user.getName());
+
+		return "redirect:/main";
 	}
 
 	@GetMapping("/account")

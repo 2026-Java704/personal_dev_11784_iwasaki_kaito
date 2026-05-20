@@ -30,6 +30,15 @@ public class Medicine {
 	@JoinColumn(name = "users_id")
 	private User user;
 
+	public Medicine(String name, Integer count, String note, Boolean mCheck) {
+		if (mCheck == null) {
+			this.name = name;
+			this.count = count;
+			this.note = note;
+			this.check = false;
+		}
+	}
+
 	public User getUser() {
 		return user;
 	}

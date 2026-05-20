@@ -22,9 +22,21 @@
 			<td th:text="${medic.count}"></td>
 			<td th:text="${medic.check}"></td>
 			<td th:text="${medic.note}"></td>
-			<td><button>更新</button></td>
-			<td><button>削除</button></td>
+			<td>
+			<form th:action="'/medicine/'+${medic.id}+'/edit'" method="get">
+			  	<input type="submit" value="更新">
+			</form>
+			</td>
+			
+			<td>
+			<form th:action="'/medicine/'+${medic.id}+'/delete'" method="post">
+				<input type="submit" value="削除">
+			</form>
+			</td>
 		</tr>
 	</table>
+	<form action="/medicine/add" method="get">
+		<button>薬の追加</button>
+	</form>
 </body>
 </html>
