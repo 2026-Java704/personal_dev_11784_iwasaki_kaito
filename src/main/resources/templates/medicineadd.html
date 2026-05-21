@@ -2,9 +2,39 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Insert title here</title>
+<title>薬の追加</title>
+<link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+	<header th:replace="~{header}"></header>
+		<hr>
+
+	<h1>薬の追加</h1>
+	<form th:action="'/medicine/add'" method="post">
+			<table border="1">
+				<tr>
+					<th>薬の名前</th>
+					<td>
+						<input type="text" name="name">
+					</td>
+				</tr>
+				<tr>
+					<th>個数</th>
+					<td>
+						<input type="text" name="count">
+					</td>
+				</tr>
+				<tr>
+					<th>備考</th>
+					<td>
+						<input type="text" name="note">
+					</td>
+				</tr>
+			</table>
+			<input type="submit" value="登録">
+			
+			<input type="hidden" th:value="${user.id}" name="userid">
+		</form>
 
 </body>
 </html>

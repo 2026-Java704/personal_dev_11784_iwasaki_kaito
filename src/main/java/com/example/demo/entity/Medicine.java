@@ -30,12 +30,17 @@ public class Medicine {
 	@JoinColumn(name = "users_id")
 	private User user;
 
-	public Medicine(String name, Integer count, String note, Boolean mCheck) {
+	public Medicine() {
+
+	}
+
+	public Medicine(String name, Integer count, String note, Boolean mCheck, User id) {
 		if (mCheck == null) {
 			this.name = name;
 			this.count = count;
 			this.note = note;
 			this.check = false;
+			this.user = id;
 		}
 	}
 
@@ -80,6 +85,10 @@ public class Medicine {
 	}
 
 	public void setCheck(Boolean check) {
-		this.check = check;
+		if (check == false) {
+			this.check = false;
+		} else {
+			this.check = true;
+		}
 	}
 }

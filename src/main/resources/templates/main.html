@@ -3,15 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <title>メイン画面</title>
+<link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+	<header th:replace="~{header}"></header>
+		<hr>
+
 	<h1>服薬一覧</h1>
 	<table border="1">
 		<tr>
 			<th>No</th>
 			<th>名前</th>
 			<th>個数</th>
-			<th>服薬確認</th>
+			<th>飲んだかチェック</th>
 			<th>備考</th>
 			<th>更新</th>
 			<th>削除</th>
@@ -20,7 +24,20 @@
 			<td th:text="${medic.id}"></td>
 			<td th:text="${medic.name}"></td>
 			<td th:text="${medic.count}"></td>
-			<td th:text="${medic.check}"></td>
+			
+			<td>
+				
+				<div th:unless="${medic.check}">
+					<form th:action="'/medicine/'+${medic.id}+'/edit'" method="post">
+					飲んでいません	
+					<input type="checkbox" name="check" value="true" th:checked="${medic.check}">
+					</form>	
+				</div>
+				
+				<div th:if="${medic.check}">
+					飲みました
+				</div>
+			</td>
 			<td th:text="${medic.note}"></td>
 			<td>
 			<form th:action="'/medicine/'+${medic.id}+'/edit'" method="get">

@@ -3,8 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <title>更新</title>
+<link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
+	<header th:replace="~{header}"></header>
+		<hr>
+
 	<h1>更新</h1>
 	
 	<form th:action="'/medicine/'+${medicine.id}+'/edit'" method="post">
@@ -27,6 +31,12 @@
 						<input type="text" name="note" th:value="${medicine.note}">
 					</td>
 				</tr>
+				<tr>
+					<th>飲んだかチェック</th>
+					<td>
+						<input type="checkbox" name="check" value="true">	
+					</td>
+					</tr>
 			</table>
 			<input type="submit" value="登録">
 		</form>
