@@ -8,26 +8,32 @@
 <body>
 	<h1>新規登録</h1>
 	<h3>お客様情報</h3>
+	<main>
 		<form action="/account" method="post">
-			<ul th:if="${errorList}">
-			<p th:each="error:${errorList}" th:text="${error}" style="color: red"></br>
-			</ul>
+			
 
 		<table border="1">
 			<tr>
 				<th>お名前</th>
 					<td>
-					<input type="text" name="name">
+					<input type="text" name="name" th:value="${name}">
 					</td>
 			</tr>
 			<tr>
 				<th>パスワード</th>
 				<td>
-				<input type="text" name="password">
+				<input type="password" name="password">
 				</td>
 			</tr>
 		</table>
+		
+		<ul th:if="${errorList}">
+			<p th:each="error:${errorList}"  style="color: red">
+				<a th:text="${error}"></a>
+			</br>
+		</ul>
 		<button>登録</button>
 		</form>
+		</main>
 </body>
 </html>

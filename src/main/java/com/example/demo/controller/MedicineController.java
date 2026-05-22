@@ -30,11 +30,14 @@ public class MedicineController {
 		this.account = account;
 	}
 
-	@GetMapping("main")
+	@GetMapping("/main")
 	public String main(Model model) {
 
 		List<Medicine> medicines = medicineRepository.findByUserIdOrderById(account.getId());
 
+		if (account.getId() == null) {
+			return "login";
+		}
 		model.addAttribute("medicines", medicines);
 
 		return "main";
@@ -45,7 +48,15 @@ public class MedicineController {
 	public String edit(@PathVariable Integer id,
 			Model model) {
 
+		if (account.getId() == null) {
+			return "login";
+		}
+
 		Medicine medicine = medicineRepository.findById(id).get();
+
+		if (medicine.getUser().getId() != account.getId()) {
+			return "redirect:/main";
+		}
 
 		model.addAttribute("medicine", medicine);
 		return "edit";
@@ -62,6 +73,9 @@ public class MedicineController {
 
 		Medicine medicine = medicineRepository.findById(id).get();
 
+		if (medicine.getUser().getId() != account.getId()) {
+			return "redirect:/main";
+		}
 		medicine.setName(name);
 		medicine.setCount(count);
 		medicine.setNote(note);
@@ -86,6 +100,10 @@ public class MedicineController {
 	public String create(
 			Model model) {
 
+		if (account.getId() == null) {
+			return "login";
+		}
+
 		List<User> user = userRepository.findByName(account.getName());
 		User User = user.get(0);
 		model.addAttribute("user", User);
@@ -109,12 +127,22 @@ public class MedicineController {
 		return "redirect:/main";
 	}
 
-	@PostMapping("/medicine/check")
+	@PostMapping("/medicine/{id}/check")
 
 	public String check(
+			@PathVariable Integer id,
+			@RequestParam(defaultValue = "") String check,
 			Model model) {
 
-		return "redirect;/main";
+		Medicine medicine = medicineRepository.findById(id).get();
+		if (check.equals("true")) {
+			medicine.setCheck(true);
+		} else {
+			medicine.setCheck(false);
+		}
+		medicineRepository.save(medicine);
+
+		return "redirect:/main";
 	}
 
 }

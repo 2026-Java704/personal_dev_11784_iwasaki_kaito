@@ -3,6 +3,8 @@ package com.example.demo.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.servlet.http.HttpSession;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,18 +21,22 @@ public class userController {
 	private final UserRepository userRepository;
 	private final MedicineRepository medicineRepository;
 	private final Account account;
+	private final HttpSession session;
 
 	public userController(
+			HttpSession session,
 			UserRepository userRepository,
 			MedicineRepository medicineRepository,
 			Account account) {
 		this.userRepository = userRepository;
 		this.medicineRepository = medicineRepository;
 		this.account = account;
+		this.session = session;
 	}
 
-	@GetMapping("/login")
+	@GetMapping({ "/login", "/logout", "/" })
 	public String index() {
+		session.invalidate();
 		return "login";
 
 	}
@@ -70,7 +76,7 @@ public class userController {
 			@RequestParam(defaultValue = "") String name,
 			@RequestParam(defaultValue = "") String password,
 			Model model) {
-
+		List<User> usersList = userRepository.findByNameAndPassword(name, password);
 		List<String> errorList = new ArrayList<>();
 		if (name.length() == 0) {
 			errorList.add("名前は必須です");
@@ -78,18 +84,17 @@ public class userController {
 		if (password.length() == 0) {
 			errorList.add("パスワードは必須です");
 		}
+		if (usersList.size() > 0)
+			errorList.add("登録済みのユーザーです");
 
 		if (errorList.size() > 0) {
 			model.addAttribute("errorList", errorList);
-			return "redirect:/account";
+			model.addAttribute("name", name);
+			return "userForm";
 		}
 
 		User user = new User(name, password);
 
-		if (errorList.size() > 0) {
-			model.addAttribute("errorList", errorList);
-			return "accountForm";
-		}
 		userRepository.save(user);
 
 		return "login";
