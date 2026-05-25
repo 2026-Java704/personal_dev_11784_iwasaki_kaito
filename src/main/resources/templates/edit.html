@@ -22,9 +22,36 @@
 				<tr>
 					<th>個数</th>
 					<td>
-						<input type="text" name="count" th:value="${medicine.count}">
-					</td>
-				</tr>
+					<select name="count">
+						<option value="1">1個</option>
+						<option value="2">2個</option>
+						<option value="3">3個</option>
+						<option value="4">4個</option>
+						<option value="5">5個</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>飲む時間帯</th>
+									<td>
+										<select name="dtime">
+											<option th:value="${medicine.dtime}" th:text="${medicine.dtime}"></option>
+											<option value="朝">朝</option>
+											<option value="昼">昼</option>
+											<option value="夜">夜</option>
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<th>食前食後</th>
+									<td>
+										<select name="around">
+											<option th:value="${medicine.around}" th:text="${medicine.around}"></option>
+											<option value="食前">食前</option>
+											<option value="食後">食後</option>
+										</select>
+									</td>
+								</tr>
 				<tr>
 					<th>備考</th>
 					<td>

@@ -11,21 +11,33 @@
 
 	<h1>服薬一覧</h1>
 	<main>
-	<table border="1">
+	<table>
 		<tr>
 			
 			<th>名前</th>
 			<th>個数</th>
+			<th>飲む時間帯</th>
+			<th>食前食後</th>
 			<th>飲んだかチェック</th>
 			<th>備考</th>
 			<th>更新</th>
 			<th>削除</th>
 		</tr>
-		<tr th:each="medic:${medicines}">
+		<tr th:each="medic : ${medicines}"
+		    th:classappend="${medic.check} ? 'checked' : ''">
 			
 			<td th:text="${medic.name}"></td>
 			<td th:text="${medic.count}"></td>
-			
+			<td th:text="${medic.dtime}"
+			    th:classappend="
+			        ${medic.dtime == '朝'} ? 'morning' :
+			        (${medic.dtime == '昼'} ? 'noon' :
+			        (${medic.dtime == '夜'} ? 'night' : ''))">
+			</td>
+			<td th:text="${medic.around}"
+				th:classappend="
+					${medic.around == '食前'} ? 'before' :
+					(${medic.around == '食後'} ? 'after' : '')"></td>
 			<td>
 				
 				<div th:unless="${medic.check}">
@@ -33,18 +45,20 @@
 					飲んでいません	
 					<input  type="hidden" name="check" value="true">
 					<div  align="right">
-					<button type="submit" class="button2">飲んだ</button>
+					<button onclick="showClickTime()" class="button2">飲んだらクリック</button>
 					</div>					
 				</form>	
 				</div>
 				
 				<div th:if="${medic.check}">
 					<form th:action="'/medicine/'+${medic.id}+'/check'" method="post">
-						飲みました
+						        <p><span th:text="${medic.mtime}"></span>に飲みました</p>
+								
 						<input  type="hidden" name="check" value="false">
 						<div  align="right">
 					<button type="submit" class="button2">元に戻す</button>	
 						</div>
+					</form>
 				</div>
 			</td>
 			<td th:text="${medic.note}"></td>
@@ -63,8 +77,9 @@
 		</tr>
 	</table>
 	<form action="/medicine/add" method="get">
-		<button class="button1">薬の追加</button>
+		<button class="button1">追加</button>
 	</form>
 	</main>
+	
 </body>
 </html>

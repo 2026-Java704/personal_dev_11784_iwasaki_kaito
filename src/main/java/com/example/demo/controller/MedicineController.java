@@ -1,5 +1,8 @@
 package com.example.demo.controller;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import org.springframework.stereotype.Controller;
@@ -8,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.demo.entity.Medicine;
 import com.example.demo.entity.User;
@@ -20,6 +24,7 @@ public class MedicineController {
 	private final MedicineRepository medicineRepository;
 	private final UserRepository userRepository;
 	private final Account account;
+	private LocalDate date;
 
 	public MedicineController(
 			MedicineRepository medicineRepository,
@@ -69,17 +74,19 @@ public class MedicineController {
 			@RequestParam(defaultValue = "") String name,
 			@RequestParam(defaultValue = "") Integer count,
 			@RequestParam(defaultValue = "") String note,
-			@RequestParam(defaultValue = "false") Boolean check) {
+			@RequestParam(defaultValue = "") String dtime,
+			@RequestParam(defaultValue = "") String around) {
 
 		Medicine medicine = medicineRepository.findById(id).get();
 
 		if (medicine.getUser().getId() != account.getId()) {
-			return "redirect:/main";
+			return "redirect:/login";
 		}
 		medicine.setName(name);
 		medicine.setCount(count);
 		medicine.setNote(note);
-		medicine.setCheck(check);
+		medicine.setDtime(dtime);
+		medicine.setAround(around);
 
 		medicineRepository.save(medicine);
 
@@ -114,16 +121,19 @@ public class MedicineController {
 	@PostMapping("/medicine/add")
 	public String store(
 			@RequestParam User userid,
-			@RequestParam(defaultValue = "") String name,
+			@RequestParam(defaultValue = " ") String name,
 			@RequestParam(defaultValue = "") Integer count,
 			@RequestParam(defaultValue = "") String note,
-			@RequestParam(defaultValue = "") Boolean mCheck,
+			@RequestParam(defaultValue = "false") Boolean mCheck,
+			@RequestParam(defaultValue = "") String dtime,
+			@RequestParam(defaultValue = "") String around,
+			@RequestParam(defaultValue = "") Integer count2,
 			Model model) {
 
-		Medicine medicine = new Medicine(name, count, note, mCheck, userid);
-
-		medicineRepository.save(medicine);
-
+		for (int i = 0; i < count2; i++) {
+			Medicine medicine = new Medicine(name, count, note, mCheck, userid, dtime, around);
+			medicineRepository.save(medicine);
+		}
 		return "redirect:/main";
 	}
 
@@ -132,7 +142,7 @@ public class MedicineController {
 	public String check(
 			@PathVariable Integer id,
 			@RequestParam(defaultValue = "") String check,
-			Model model) {
+			RedirectAttributes redirectAttributes) {
 
 		Medicine medicine = medicineRepository.findById(id).get();
 		if (check.equals("true")) {
@@ -140,6 +150,13 @@ public class MedicineController {
 		} else {
 			medicine.setCheck(false);
 		}
+
+		LocalDateTime now = LocalDateTime.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd日HH時mm分");
+		String currentTime = now.format(formatter);
+
+		redirectAttributes.addFlashAttribute("clickedTime", currentTime);
+		medicine.setMtime(currentTime);
 		medicineRepository.save(medicine);
 
 		return "redirect:/main";

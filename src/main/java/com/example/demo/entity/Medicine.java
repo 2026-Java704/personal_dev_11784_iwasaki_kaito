@@ -23,8 +23,32 @@ public class Medicine {
 
 	private Integer count;
 
+	@Column(name = "m_time")
+	private String mtime;
+
 	@Column(name = "m_check")
 	private Boolean check;
+
+	@Column(name = "drink_time")
+	private String dtime;
+
+	private String around;
+
+	public String getDtime() {
+		return dtime;
+	}
+
+	public void setDtime(String dtime) {
+		this.dtime = dtime;
+	}
+
+	public String getAround() {
+		return around;
+	}
+
+	public void setAround(String around) {
+		this.around = around;
+	}
 
 	@ManyToOne
 	@JoinColumn(name = "users_id")
@@ -34,14 +58,14 @@ public class Medicine {
 
 	}
 
-	public Medicine(String name, Integer count, String note, Boolean mCheck, User id) {
-		if (mCheck == null) {
-			this.name = name;
-			this.count = count;
-			this.note = note;
-			this.check = false;
-			this.user = id;
-		}
+	public Medicine(String name, Integer count, String note, Boolean mCheck, User id, String dtime, String around) {
+		this.name = name;
+		this.count = count;
+		this.note = note;
+		this.check = false;
+		this.user = id;
+		this.dtime = dtime;
+		this.around = around;
 	}
 
 	public User getUser() {
@@ -90,5 +114,13 @@ public class Medicine {
 		} else {
 			this.check = true;
 		}
+	}
+
+	public String getMtime() {
+		return mtime;
+	}
+
+	public void setMtime(String mtime) {
+		this.mtime = mtime;
 	}
 }
